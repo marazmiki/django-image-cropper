@@ -1,0 +1,8 @@
+syntax: glob
+*.pyc
+*.swp
+*.git
+*.egg-info/
+dist/
+.gitignore
+

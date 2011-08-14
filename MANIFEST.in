@@ -1,0 +1,23 @@
+include README.rst
+include AUTHORS
+include MANIFEST.in
+include setup.py
+include cropper/locale/ru/LC_MESSAGES/django.mo
+include cropper/locale/ru/LC_MESSAGES/django.po
+include cropper/media/cropper/cropper.js
+include cropper/media/cropper/Jcrop.gif
+include cropper/media/cropper/jquery.Jcrop.css
+include cropper/media/cropper/jquery.Jcrop.js
+include cropper/media/cropper/jquery-1.5.min.js
+include cropper/templates/cropper/base.html
+include cropper/templates/cropper/crop.html
+include cropper/templates/cropper/upload.html
+include cropper/__init__.py
+include cropper/admin.py
+include cropper/defaults.py
+include cropper/forms.py
+include cropper/models.py
+include cropper/settings.py
+include cropper/urls.py
+include cropper/views.py
+

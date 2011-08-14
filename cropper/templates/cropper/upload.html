@@ -1,0 +1,14 @@
+{% extends "cropper/base.html" %}
+{% load i18n %}
+
+{% block cropper_content %}
+
+<form method="post" action="{% url cropper_upload %}" enctype="multipart/form-data">
+   {% csrf_token %}
+   <div>
+       {{ form.as_p }}
+       <p><input type="submit" value="{% trans "Upload" %}" /></p>
+   </div>
+</form>
+
+{% endblock %}
