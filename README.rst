@@ -16,7 +16,13 @@ First of all, plese install django-image-cropper:
     pip install django-image-cropper
 
 Then you must edit your settings module: add item 'cropper' to 
-your INSTALLED_APPS tuple. 
+your INSTALLED_APPS tuple.
+
+::
+
+    INSTALLED_APPS += (
+        'cropper',
+    )
 
 Next step add django-image-cropper URL config to your url module:
 

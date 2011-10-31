@@ -6,7 +6,7 @@
     <tbody>
         <tr>
             <td><img width="{{ original.image_width }}" height="{{ original.image_height }}" src="{{ original.image.url }}" id="cropbox" alt="" /></td>
-			<td><div style="width: 100px; height: 100px; overflow: hidden;"><img src="{{ original.image.url }}" id="preview" alt="" /></div></td>
+            <td><div style="width: 100px; height: 100px; overflow: hidden;"><img src="{{ original.image.url }}" id="preview" alt="" /></div></td>
         </tr>
     </tbody>
     </table>
@@ -17,32 +17,5 @@
         <p><input type="submit" value="{% trans "Crop" %}" /></p>
         </form>
     </div>
-    <script type="text/javascript" src="{{ STATIC_URL }}cropper/cropper.js">&nbsp;</script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cropper/js/cropper.js">&nbsp;</script>
 {% endblock %}
-</body>
-</html>
-
-
-
-
-{% comment %}
-
-<div>
-    <img id="image-original" src="{{ original.image.url }}" />
-</div>
-<div>
-    <form method="post" id="crop-form" action="{{ original.get_absolute_url }}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <p><input type="submit" value="{% trans "Crop" %}" /></p>
-    </form>
-</div>
-
-<div id="crop-preview">
-    {% if cropped %}
-        <img src="{{ cropped.image.url }}" />
-    {% endif %}
-</div>
-
-{% endblock %}
-{% endcomment %}

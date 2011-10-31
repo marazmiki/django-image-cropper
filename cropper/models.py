@@ -21,41 +21,27 @@ class Original(models.Model):
         return '%s/%s' % (settings.ROOT, filename)
 
     def __unicode__(self):
-        
-        return unicode(self.name)
+        return unicode(self.image)
 
     def get_absolute_url(self):
         return 'cropper_crop', [self.pk]    
     get_absolute_url = models.permalink(get_absolute_url)
 
-    def save(self):
-        if not self.name:
-            self.name = self.image
-        super(Original, self).save()
- 
-    name = models.CharField(max_length=255)
-
-    image = models.ImageField(
-        verbose_name = _('Original image'),
+    image = models.ImageField(_('Original image'),
         upload_to    = upload_image,
         width_field  = 'image_width',
         height_field = 'image_height',
-        validators   = [dimension_validator],
-    )
-    image_width = models.PositiveIntegerField(
-        verbose_name = _('Image width'),
+        validators   = [dimension_validator])
+    image_width = models.PositiveIntegerField(_('Image width'),
         editable = False,
-        default = 0,
-    )
-    image_height = models.PositiveIntegerField(
-        verbose_name = _('Image height'),
+        default = 0)
+    image_height = models.PositiveIntegerField(_('Image height'),
         editable = False,
-        default = 0,
-    )
+        default = 0)
 
 class Cropped(models.Model):
     def __unicode__(self):
-        return u'%s - %sx%s' % (self.name, self.w, self.h)
+        return u'%s-%sx%s' % (self.original, self.w, self.h)
 
     def upload_image(self, filename):
         return '%s/crop-%s' % (settings.ROOT, filename)
@@ -72,64 +58,24 @@ class Cropped(models.Model):
         ]).save(django_settings.MEDIA_ROOT + os.sep + target)
 
         self.image = target        
-
-        if not self.name:
-            self.name = self.image
-
         super(Cropped, self).save(*args, **kwargs)
-    
-    name = models.CharField(max_length=255)
 
     original = models.ForeignKey(Original,
         related_name = 'cropped',
-        verbose_name = _('Original image'),
-    )
-    image = models.ImageField(
-        verbose_name = _('Image'),
-        upload_to    = upload_image,
-        editable     = False,
-    )
-    x = models.PositiveIntegerField(
-        verbose_name = _('Offset X'),
-        default = 0,
-    )
-    y = models.PositiveIntegerField(
-        verbose_name = _('Offset Y'),
-        default = 0,
-    )
-    w = models.PositiveIntegerField(
-        verbose_name = _('Cropped area width'),
+        verbose_name = _('Original image'))
+    image = models.ImageField(_('Image'),
+        upload_to = upload_image,
+        editable  = False)
+    x = models.PositiveIntegerField(_('Offset X'),
+        default = 0)
+    y = models.PositiveIntegerField(_('Offset Y'),
+        default = 0)
+    w = models.PositiveIntegerField(_('Cropped area width'),
         blank = True,
-        null = True
-    )
-    h = models.PositiveIntegerField(
-        verbose_name = _('Cropped area height'),
+        null = True)
+    h = models.PositiveIntegerField(_('Cropped area height'),
         blank = True,
-        null = True
-    )
-    w_display = models.PositiveIntegerField(
-        verbose_name = _('Width for display'),
-        blank = True,
-        null = True
-    )
-    h_display = models.PositiveIntegerField(
-        verbose_name = _('Height for display'),
-        blank = True,
-        null = True
-    )
-    
-    @property
-    def geometry(self):
-        """
-        provides fixed geometry for image resizing applications (such as sorl.thumbnail)
-        """
-        if self.w_display and self.h_display:
-            return u'%sx%s' % (self.w_display, self.h_display)
-        if self.w_display:
-            return u'%s' % (self.w_display,)
-        if self.h_display:
-            return u'x%s' % (self.h_display,)
-        return False
+        null = True)
 
     class Meta:
         verbose_name = _('cropped image')

@@ -8,3 +8,4 @@ ALLOWED_DIMENSIONS = getattr(settings, 'CROPPER_ALLOWED_DIMENSIONS', ())
 
 UPLOAD_SUCCESS = upload_success
 CROP_SUCCESS   = crop_success
+SHOW_ADMIN = getattr(settings, 'CROPPER_SHOW_ADMIN', True)

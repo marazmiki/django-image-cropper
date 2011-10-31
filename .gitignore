@@ -1,4 +1,4 @@
+.hg
+.hgignore
 *.pyc
 *.swp
-.hg
-dist/

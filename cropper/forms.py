@@ -20,9 +20,6 @@ class CroppedForm(forms.ModelForm):
         The class contructor. Changes ``original`` widget field type to hidden
         """
         super(CroppedForm, self).__init__(*args, **kwargs)
-
-        #for i in ['original', 'x', 'y', 'w', 'h']:
-        #    self.fields[i].widget = forms.HiddenInput()
         self.fields['original'].widget = forms.HiddenInput()
 
     def _dimension_clean(self, field, key, offset='not_exists'):

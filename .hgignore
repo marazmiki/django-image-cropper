@@ -1,8 +1,8 @@
 syntax: glob
 *.pyc
 *.swp
-*.git
 *.egg-info/
 dist/
+.git
 .gitignore
 
