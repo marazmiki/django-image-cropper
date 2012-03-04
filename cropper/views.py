@@ -1,44 +1,75 @@
-from django.views.generic.simple import direct_to_template as render
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from django.utils import simplejson
+from django.views.generic.edit import FormView
 from cropper import settings
-from cropper.forms import CroppedForm, OriginalForm
 from cropper.models import Original
+from cropper.forms import CroppedForm, OriginalForm
 
-def upload(request, form_class=OriginalForm,
-           success=settings.UPLOAD_SUCCESS,
-           template_name='cropper/upload.html' 
-    ):
+class UploadView(FormView):
     """
     Upload picture to future cropping
     """
-    form = form_class(request.POST or None, request.FILES or None)
+    form_class = OriginalForm
+    template_name = 'cropper/upload.html'
 
-    if form.is_valid():
+    def success(self, request, form, original):
+        return redirect(original)
+
+    def form_valid(self, form):
         original = form.save()
-        return success(request, form, original)
+        return self.success(self.request, form, original)
 
-    return render(request, template_name, {
-        'form': form,
-    })
 
-def crop(request, original_id, form_class=CroppedForm,
-         success=settings.CROP_SUCCESS
-    ):
+class CropView(FormView):
     """
     Crop picture and save result into model
     """
-    original = get_object_or_404(Original, pk=original_id)
-    cropped = None
+    form_class = CroppedForm
+    template_name = 'cropper/crop.html'
 
-    form = form_class(request.POST or None, initial={'original': original})
+    def get_object(self):
+        """
+        Returns the original image object
+        """
+        return get_object_or_404(Original, pk=self.kwargs['original_id'])
 
-    if form.is_valid():
+    def get_initial(self):
+        """
+        Initial dictionary that passed into form instance arguments
+        """
+        return {'original': self.get_object()}
+
+    def get_context_data(self, **kwargs):
+        """
+        Context dictionary that passed into template renderer
+        """
+        return {
+            'form': self.get_form(self.form_class),
+            'original': self.get_object(),
+            'cropped': None
+        }
+
+    def form_valid(self, form):
         cropped = form.save(commit=False)
         cropped.save()
-        return success(request, form, original, cropped)
 
-    return render(request, 'cropper/crop.html', {
-        'form'     : form,
-        'cropped'  : cropped,
-        'original' : original,
-    })
+        return self.success(request  = self.request,
+                            form     = form,
+                            original = self.get_object(),
+                            cropped  = cropped)
+
+    def success(self, request, form, original, cropped):
+        """
+        Default success crop handler
+        """
+        return HttpResponse(simplejson.dumps({'image': {
+                'url'    : cropped.image.url,
+                'width'  : cropped.w,
+                'height' : cropped.h,
+            }}), mimetype='application/x-json') if request.is_ajax() else render(request, 'cropper/crop.html',
+            {
+                'form'     : form,
+                'cropped'  : cropped,
+                'original' : original
+            })

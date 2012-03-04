@@ -1,11 +1,10 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from cropper.models import Cropped, Original
-import Image
 
 class OriginalForm(forms.ModelForm):
     """
-    Form class for uplaod images will be cropped
+    Form class for upload images will be cropped
     """
     class Meta:
         model = Original
@@ -17,7 +16,7 @@ class CroppedForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        The class contructor. Changes ``original`` widget field type to hidden
+        The class constructor. Changes ``original`` widget field type to hidden
         """
         super(CroppedForm, self).__init__(*args, **kwargs)
         self.fields['original'].widget = forms.HiddenInput()

@@ -4,12 +4,10 @@
 import setuptools
 import os
 
-version='0.1.2'
+version='0.2.0'
 package = 'cropper'
 
 path = os.path.join(os.path.dirname(__file__), 'cropper')
-print path
-print setuptools.find_packages()
 setuptools.setup(
     name = 'django-image-cropper',
     version = version,
@@ -21,19 +19,9 @@ setuptools.setup(
     description = 'This app allows upload and crop images',
     long_description = open('README.rst').read(),
     license = 'MIT license',
-    install_requires = ['django>=1.2.5', 'PIL'],
-
+    install_requires = ['django>=1.3.1', 'PIL'],
     packages = setuptools.find_packages(),
-        include_package_data=True,
-#    package_dir={'cropper':  path},
-#    package_data = { 'cropper': [
-#        'locale/ru/LC_MESSAGES/*',
-#        'static/cropper/js/*',
-#        'static/cropper/css/*',
-#        'static/cropper/img/*',
-#        'templates/cropper/*',
-#        'templates/admin/cropper/cropped/*',
-#    ]},
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',

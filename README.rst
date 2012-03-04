@@ -2,21 +2,31 @@
 django-image-cropper
 ====================
 
-This application used for image cropping. User can upload image or photo,
-pick wished area up and save image. 
+This application is used for image cropping. User can upload some images or photo,
+pick wished area up and save image.
 
 The license is MIT.
 
+Requirements
+============
+
+Starting with version 0.2 the Django of version 1.3+ is required. If you're
+use an older Django version, please
+
+Also you need PIL or Pillow graphic libraries to be installed. The PIL
+will be installed together with django-image-cropper
+
 Installation
 ============
-First of all, plese install django-image-cropper:
+
+First of all, please install django-image-cropper:
 
 ::
 
     pip install django-image-cropper
 
-Then you must edit your settings module: add item 'cropper' to 
-your INSTALLED_APPS tuple.
+Then you must edit your settings module: add item 'cropper' to
+your INSTALLED_APPS:
 
 ::
 
@@ -40,26 +50,26 @@ And last call syncdb management command in your project:
 
     ./manage.py syncdb 
 
-if you're use django v1.3 or later, you also collect static files:
+if you're use django.contrib.staticfiles application, you also
+need to collect static files:
 
 ::
     
     ./manage.py collecstatic
     
 
-Otherwise you need copy django-image-cropper/cropper/media files into your
-MEDIA_ROOT directory manually or create a symlink.
-
+Otherwise you need copy django-image-cropper/cropper/static files into your
+STATIC_ROOT directory manually or create a symlink.
 
 Usage
 =====
 
-Open /cropper/ URL in your browser. You can choose image and upload it. In
-next page. If javascript is enabled and static serve works correct, you'll
-jquery's jcrop plugin workspace. Select a picture region my means of mouse
-and push 'Crop' button.
+Open /cropper/ URL in your browser. Here you can choose image via file input
+and upload it. On the next screen, if javascript is enabled and static serves
+good, you'll see the jQuery's jCrop plugin workspace. Pick some area and push
+the Crop button to get cropped image
 
-Image will be cropped and saved on server.
+Cropped image copies are saved on server
 
 
 Customize crop logics
