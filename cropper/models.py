@@ -11,18 +11,17 @@ def dimension_validator(image):
     """
     """
     if settings.MAX_WIDTH != 0 and image.width > settings.MAX_WIDTH:
-        raise ValidationError, _('Image width greater then allowed')
+        raise ValidationError(_('Image width greater then allowed'))
 
     if settings.MAX_HEIGHT != 0 and image.height > settings.MAX_HEIGHT:
-        raise ValidationError, _('Image height greater then allowed')
+        raise ValidationError(_('Image height greater then allowed'))
+
 
 class Original(models.Model):
     def upload_image(self, filename):
-        return u'{path}/{name}.{ext}'.format(
-            path = settings.ROOT,
-            name = uuid.uuid4().hex,
-            ext  = os.path.splitext(filename)[1].strip('.')
-        )
+        return u'{path}/{name}.{ext}'.format(path=settings.ROOT,
+                                             name=uuid.uuid4().hex,
+                                             ext=os.path.splitext(filename)[1].strip('.'))
 
     def __unicode__(self):
         return unicode(self.image)
@@ -32,16 +31,16 @@ class Original(models.Model):
         return 'cropper_crop', [self.pk]    
 
     image = models.ImageField(_('Original image'),
-        upload_to    = upload_image,
-        width_field  = 'image_width',
-        height_field = 'image_height',
-        validators   = [dimension_validator])
+                            upload_to=upload_image,
+                            width_field='image_width',
+                            height_field='image_height',
+                            validators=[dimension_validator])
     image_width = models.PositiveIntegerField(_('Image width'),
-        editable = False,
-        default = 0)
+                                                editable=False,
+                                                default=0)
     image_height = models.PositiveIntegerField(_('Image height'),
-        editable = False,
-        default = 0)
+                                               editable=False,
+                                               default=0)
 
 
 class Cropped(models.Model):
@@ -51,7 +50,7 @@ class Cropped(models.Model):
     def upload_image(self, filename):
         return '%s/crop-%s' % (settings.ROOT, filename)
 
-    def save(self, *args, **kwargs): #force_insert=False, force_update=False, using=None):
+    def save(self, *args, **kwargs):
         source = self.original.image.path
         target = self.upload_image(os.path.basename(source))
 
@@ -66,22 +65,23 @@ class Cropped(models.Model):
         super(Cropped, self).save(*args, **kwargs)
 
     original = models.ForeignKey(Original,
-        related_name = 'cropped',
-        verbose_name = _('Original image'))
+                                 related_name='cropped',
+                                 verbose_name=_('Original image'))
     image = models.ImageField(_('Image'),
-        upload_to = upload_image,
-        editable  = False)
+                              upload_to=upload_image,
+                              editable=False)
     x = models.PositiveIntegerField(_('offset X'),
-        default = 0)
+                                   default=0)
     y = models.PositiveIntegerField(_('offset Y'),
-        default = 0)
+                                   default=0)
     w = models.PositiveIntegerField(_('cropped area width'),
-        blank = True,
-        null = True)
+                                    blank=True,
+                                    null=True)
     h = models.PositiveIntegerField(_('cropped area height'),
-        blank = True,
-        null = True)
+                                    blank=True,
+                                    null=True)
 
-    class Meta:
+    class Meta(object):
         verbose_name = _('cropped image')
         verbose_name_plural = _('cropped images')
+
