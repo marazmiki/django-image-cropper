@@ -7,7 +7,7 @@ class OriginalForm(forms.ModelForm):
     """
     Form class for upload images will be cropped
     """
-    class Meta:
+    class Meta(object):
         model = Original
 
 
@@ -57,8 +57,9 @@ class CroppedForm(forms.ModelForm):
         """
         return self._dimension_clean('height', 'h', 'y')
 
-    class Meta:
+    class Meta(object):
         model = Cropped
         widgets = {
             'original': forms.HiddenInput(),
         }
+
