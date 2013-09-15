@@ -6,6 +6,7 @@ from cropper import settings
 from cropper.models import Original
 from cropper.forms import CroppedForm, OriginalForm
 
+
 class UploadView(FormView):
     """
     Upload picture to future cropping
@@ -54,10 +55,10 @@ class CropView(FormView):
         cropped = form.save(commit=False)
         cropped.save()
 
-        return self.success(request  = self.request,
-                            form     = form,
-                            original = self.get_object(),
-                            cropped  = cropped)
+        return self.success(request=self.request,
+                            form=form,
+                            original=self.get_object(),
+                            cropped=cropped)
 
     def success(self, request, form, original, cropped):
         """

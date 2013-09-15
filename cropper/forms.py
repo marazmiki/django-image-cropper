@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from cropper.models import Cropped, Original
 
+
 class OriginalForm(forms.ModelForm):
     """
     Form class for upload images will be cropped
@@ -9,17 +10,11 @@ class OriginalForm(forms.ModelForm):
     class Meta:
         model = Original
 
+
 class CroppedForm(forms.ModelForm):
     """
     Form class for crop images
     """
-
-    def __init__(self, *args, **kwargs):
-        """
-        The class constructor. Changes ``original`` widget field type to hidden
-        """
-        super(CroppedForm, self).__init__(*args, **kwargs)
-        self.fields['original'].widget = forms.HiddenInput()
 
     def _dimension_clean(self, field, key, offset='not_exists'):
         """
@@ -34,7 +29,7 @@ class CroppedForm(forms.ModelForm):
             return value
 
         if value + offset > getattr(original, 'image_%s' % field):
-            raise forms.ValidationError, _('Value exceeds picture dimension')
+            raise forms.ValidationError(_('Value exceeds picture dimension'))
 
         return value
 
@@ -64,3 +59,6 @@ class CroppedForm(forms.ModelForm):
 
     class Meta:
         model = Cropped
+        widgets = {
+            'original': forms.HiddenInput(),
+        }
