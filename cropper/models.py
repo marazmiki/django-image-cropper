@@ -32,29 +32,16 @@ class Original(models.Model):
         return 'cropper_crop', [self.pk]
 
     image = models.ImageField(_('Original image'),
-<<<<<<< HEAD
-        upload_to=upload_image,
-        width_field='image_width',
-        height_field='image_height',
-        validators=[dimension_validator])
+                              upload_to=upload_image,
+                              width_field='image_width',
+                              height_field='image_height',
+                              validators=[dimension_validator])
     image_width = models.PositiveIntegerField(_('Image width'),
-        editable=False,
-        default=0)
-    image_height=models.PositiveIntegerField(_('Image height'),
-        editable=False,
-        default=0)
-=======
-                            upload_to=upload_image,
-                            width_field='image_width',
-                            height_field='image_height',
-                            validators=[dimension_validator])
-    image_width = models.PositiveIntegerField(_('Image width'),
-                                                editable=False,
-                                                default=0)
+                                              editable=False,
+                                              default=0)
     image_height = models.PositiveIntegerField(_('Image height'),
                                                editable=False,
                                                default=0)
->>>>>>> 40096c1ec4b370e60114578bd6a368973db6bbb4
 
 
 class Cropped(models.Model):
