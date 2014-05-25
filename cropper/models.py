@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.conf import settings as django_settings
 from cropper import settings
-import Image
+from PIL import Image
 import os
 import uuid
 
