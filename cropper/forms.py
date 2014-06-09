@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from cropper.models import Cropped, Original
@@ -21,8 +23,8 @@ class CroppedForm(forms.ModelForm):
         Form helper. Validates for cropped area offset left, offset top,
         area width and  height values.
         """
-        value  = self.cleaned_data.get(key, 0)
-        offset  = self.cleaned_data.get(offset, 0)
+        value = self.cleaned_data.get(key, 0)
+        offset = self.cleaned_data.get(offset, 0)
         original = self.cleaned_data.get('original')
 
         if not original:
@@ -62,4 +64,3 @@ class CroppedForm(forms.ModelForm):
         widgets = {
             'original': forms.HiddenInput(),
         }
-

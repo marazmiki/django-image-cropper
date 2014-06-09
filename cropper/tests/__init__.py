@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django import test
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -97,19 +99,19 @@ class UploadTestCase(BaseTestCase):
 
     def test_ajax_crop(self):
         original = self.upload_scenario()
-        page = self.client.post(original.get_absolute_url(), data={
-            'original'  : original.pk,
-            'x'         : CROP_X,
-            'y'         : CROP_Y,
-            'w'         : CROP_W,
-            'h'         : CROP_H
-        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        page = self.client.post(original.get_absolute_url(), 
+                                data={'original': original.pk,
+                                      'x': CROP_X,
+                                      'y': CROP_Y,
+                                      'w': CROP_W,
+                                      'h': CROP_H}, 
+                                HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         json = simplejson.loads(page.content)
 
-        self.assertIn('image',      json)
-        self.assertIn('url',        json['image'])
-        self.assertIn('width',      json['image'])
-        self.assertIn('height',     json['image'])
-        self.assertEquals(CROP_W,   json['image']['width'])
-        self.assertEquals(CROP_H,   json['image']['height'])
+        self.assertIn('image', json)
+        self.assertIn('url', json['image'])
+        self.assertIn('width', json['image'])
+        self.assertIn('height', json['image'])
+        self.assertEquals(CROP_W, json['image']['width'])
+        self.assertEquals(CROP_H, json['image']['height'])

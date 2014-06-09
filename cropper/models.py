@@ -72,9 +72,9 @@ class Cropped(models.Model):
                               upload_to=upload_image,
                               editable=False)
     x = models.PositiveIntegerField(_('offset X'),
-                                   default=0)
+                                    default=0)
     y = models.PositiveIntegerField(_('offset Y'),
-                                   default=0)
+                                    default=0)
     w = models.PositiveIntegerField(_('cropped area width'),
                                     blank=True,
                                     null=True)
@@ -85,4 +85,3 @@ class Cropped(models.Model):
     class Meta(object):
         verbose_name = _('cropped image')
         verbose_name_plural = _('cropped images')
-
