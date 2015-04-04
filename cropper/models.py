@@ -1,3 +1,9 @@
+# coding: utf-8
+
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -20,9 +26,10 @@ def dimension_validator(image):
 
 class Original(models.Model):
     def upload_image(self, filename):
-        return u'{path}/{name}.{ext}'.format(path=settings.ROOT,
-                                             name=uuid.uuid4().hex,
-                                             ext=os.path.splitext(filename)[1].strip('.'))
+        return u'{path}/{name}.{ext}'.format(
+            path=settings.ROOT,
+            name=uuid.uuid4().hex,
+            ext=os.path.splitext(filename)[1].strip('.'))
 
     def __unicode__(self):
         return unicode(self.image)
