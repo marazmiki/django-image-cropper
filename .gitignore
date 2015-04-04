@@ -2,3 +2,5 @@
 .hgignore
 *.pyc
 *.swp
+*.egg-info
+*.egg
