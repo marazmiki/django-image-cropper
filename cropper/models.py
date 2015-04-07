@@ -9,12 +9,10 @@ from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.exceptions import ValidationError
-from django.conf import settings as django_settings
+from django.core.files.base import ContentFile
 from dj_upload_to import upload
 from cropper import settings
 from PIL import Image
-import os
-import uuid
 
 
 def dimension_validator(image):
@@ -56,13 +54,16 @@ class Original(models.Model):
 
 @python_2_unicode_compatible
 class Cropped(models.Model):
+    """
+    Cropped segment of original image
+    """
     original = models.ForeignKey(Original, related_name='cropped',
                                  verbose_name=_('Original image'))
     image = models.ImageField(_('Image'), upload_to=upload,
                               editable=False)
     x = models.PositiveIntegerField(_('offset X'), default=0)
     y = models.PositiveIntegerField(_('offset Y'), default=0)
-    w = models.PositiveIntegerField(_('cropped area width'), 
+    w = models.PositiveIntegerField(_('cropped area width'),
                                     blank=True, null=True)
     h = models.PositiveIntegerField(_('cropped area height'),
                                     blank=True, null=True)
@@ -70,29 +71,37 @@ class Cropped(models.Model):
     def __str__(self):
         return u'%s-%sx%s' % (self.original, self.w, self.h)
 
-    def save(self, *args, **kwargs):
-        source = self.original.image.url
-        target = self.upload_image(os.path.basename(source))
-        format = os.path.splitext(source)[1].strip('.').upper()
-
-        buff = six.BytesIO(self.original.image.read())
-        print(buff)
-        buff2 = six.BytesIO()
-        im = Image.open(buff)
-        im.crop([
-                self.x,             # Left
-                self.y,             # Top
-                self.x + self.w,    # Right
-                self.y + self.h     # Bottom
-        ])
-        im.save(buff)
-        self.image.save(target, buff2)
-
-        super(Cropped, self).save(*args, **kwargs)
-
     class Meta(object):
         app_label = 'cropper'
         verbose_name = _('cropped image')
         verbose_name_plural = _('cropped images')
 
-# models.signals.pre_save.connect(sender=Cropped, dispatch_uid='cropper.models')
+
+def create_cropped_image(**kwargs):
+    cropped = kwargs['instance']
+    original = cropped.original
+    cropped_stream = six.BytesIO()
+
+    im = Image.open(original.image)
+    crop_im = im.crop([
+        cropped.x,                # Left
+        cropped.y,                # Top
+        cropped.x + cropped.w,    # Right
+        cropped.y + cropped.h     # Bottom
+    ])
+
+    crop_im.save(cropped_stream, format=im.format)
+
+    cropped_stream.seek(0)
+    cropped.image.save(upload(cropped, original.image.url),
+                       ContentFile(cropped_stream.read()), False)
+
+
+def reload_model_data(**kwargs):
+    kwargs['instance'] = Cropped.objects.get(pk=kwargs['instance'].pk)
+
+
+models.signals.pre_save.connect(create_cropped_image, sender=Cropped,
+                                dispatch_uid='cropper.models')
+models.signals.post_save.connect(reload_model_data, sender=Cropped,
+                                 dispatch_uid='cropper.models')

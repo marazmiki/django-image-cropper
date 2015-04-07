@@ -5,7 +5,7 @@ import setuptools
 import os
 
 
-version='0.3.0'
+version = '0.3.0'
 package = 'cropper'
 
 path = os.path.join(os.path.dirname(__file__), 'cropper')
@@ -15,7 +15,8 @@ setuptools.setup(
     author='marazmiki',
     author_email='marazmiki@gmail.com',
     url='http://pypi.python.org/pypi/django-image-cropper/',
-    download_url='http://bitbucket.org/marazmiki/django-image-cropper/get/tip.zip',
+    download_url=('http://bitbucket.org/marazmiki/django-'
+                  'image-cropper/get/tip.zip'),
     description='This app allows upload and crop images',
     long_description=open('README.rst').read(),
     license='MIT license',

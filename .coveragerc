@@ -2,6 +2,10 @@
 branch = True
 
 [report]
+omit = *migrations*
+show_missing = true
+
+
 exclude_lines =
     pragma: no cover
     def __repr__

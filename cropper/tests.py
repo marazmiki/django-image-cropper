@@ -5,8 +5,8 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from cropper.models import Original, Cropped
 from django.core.files.base import ContentFile
+from PIL import Image
 import os
-import filecmp
 import json
 
 
@@ -36,11 +36,12 @@ class BaseTestCase(test.TestCase):
 
 class ModelTest(test.TestCase):
     def create_original(self):
-        original = Original()
-        original.image.save(
-            os.path.basename(self.filename),
-            ContentFile(open(self.filename).read())
-        )
+        with open(self.filename, 'rb') as fp:
+            original = Original()
+            original.image.save(
+                os.path.basename(self.filename),
+                ContentFile(fp.read())
+            )
         return original
 
     def setUp(self):
@@ -56,8 +57,12 @@ class ModelTest(test.TestCase):
         self.original = self.create_original()
 
     def test_original(self):
+        source = Image.open(self.filename)
+        original = Image.open(self.original.image)
+        self.assertEqual(source.size, original.size)
+        self.assertEqual(source.format, original.format)
 
-        self.assertTrue(filecmp.cmp(self.filename, self.original.image.path))
+#        self.assertTrue(filecmp.cmp(self.filename, self.original.image.path))
 
     def test_cropped(self):
         cropped = Cropped.objects.create(
@@ -66,10 +71,11 @@ class ModelTest(test.TestCase):
             h=CROP_H,
             x=CROP_X,
             y=CROP_Y)
-        self.assertTrue(filecmp.cmp(
-            get_filename('cropped_304-151-175-193.jpg'),
-            cropped.image.path)
-        )
+
+        orig = Image.open(get_filename('cropped_304-151-175-193.jpg'))
+        crop = Image.open(cropped.image)
+
+        self.assertEqual(orig.size, crop.size)
 
 
 class UploadTestCase(BaseTestCase):
@@ -99,12 +105,15 @@ class UploadTestCase(BaseTestCase):
             'w': CROP_W,
             'h': CROP_H
         })
+
         self.assertIn('original', page.context)
         self.assertIn('cropped', page.context)
-        self.assertTrue(filecmp.cmp(
-            get_filename('cropped_304-151-175-193.jpg'),
-            page.context['cropped'].image.path)
-        )
+
+        with open(get_filename('cropped_304-151-175-193.jpg'), 'rb') as fp:
+            self.assertEqual(
+                Image.open(fp).size,
+                Image.open(page.context['cropped'].image).size
+            )
 
     def test_ajax_crop(self):
         original = self.upload_scenario()
@@ -116,11 +125,11 @@ class UploadTestCase(BaseTestCase):
                                       'h': CROP_H},
                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        json = simplejson.loads(page.content)
+        data = json.loads(page.content)
 
-        self.assertIn('image', json)
-        self.assertIn('url', json['image'])
-        self.assertIn('width', json['image'])
-        self.assertIn('height', json['image'])
-        self.assertEquals(CROP_W, json['image']['width'])
-        self.assertEquals(CROP_H, json['image']['height'])
+        self.assertIn('image', data)
+        self.assertIn('url', data['image'])
+        self.assertIn('width', data['image'])
+        self.assertIn('height', data['image'])
+        self.assertEquals(CROP_W, data['image']['width'])
+        self.assertEquals(CROP_H, data['image']['height'])
