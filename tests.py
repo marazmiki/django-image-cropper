@@ -13,9 +13,13 @@ settings.configure(
     DEBUG=False,
     ROOT_URLCONF='cropper.urls',
     MIDDLEWARE_CLASSES=(),
+    STATIC_URL='/static/',
+    CROPPER_ROOT='.',
     INSTALLED_APPS=(
+        'django.contrib.staticfiles',
         'cropper',
     ),
+    DEFAULT_FILE_STORAGE='inmemorystorage.InMemoryStorage',
     DATABASES={
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

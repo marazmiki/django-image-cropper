@@ -19,8 +19,10 @@ setuptools.setup(
     description='This app allows upload and crop images',
     long_description=open('README.rst').read(),
     license='MIT license',
-    install_requires=['django>=1.5', 'Pillow'],
+    install_requires=['django>=1.5', 'Pillow', 'dj-upload-to'],
+    tests_require=['dj-inmemorystorage'],
     packages=setuptools.find_packages(),
+    test_suite='tests.main',
     include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',

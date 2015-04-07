@@ -4,10 +4,11 @@ from django import test
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from cropper.models import Original, Cropped
-from django.utils import simplejson
 from django.core.files.base import ContentFile
 import os
 import filecmp
+import json
+
 
 CROP_X = 304
 CROP_Y = 151
@@ -22,7 +23,7 @@ def get_filename(name='original.jpg'):
     """
     Returns the full path to test images
     """
-    return os.path.join(os.path.dirname(__file__), name)
+    return os.path.join(os.path.dirname(__file__), 'tests', name)
 
 
 class BaseTestCase(test.TestCase):

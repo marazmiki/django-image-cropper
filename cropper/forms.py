@@ -15,6 +15,7 @@ class OriginalForm(forms.ModelForm):
     """
     class Meta(object):
         model = Original
+        exclude = []
 
 
 class CroppedForm(forms.ModelForm):
@@ -65,6 +66,7 @@ class CroppedForm(forms.ModelForm):
 
     class Meta(object):
         model = Cropped
+        exclude = []
         widgets = {
             'original': forms.HiddenInput(),
         }

@@ -4,12 +4,22 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import division
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import FormView
 from cropper.models import Original
 from cropper.forms import CroppedForm, OriginalForm
-import json
+
+
+try:
+    from django.http import JsonResponse
+except ImportError:
+    from django.http import HttpResponse
+    import json
+
+    class JsonResponse(HttpResponse):
+        def __init__(self, data, **kwargs):
+            kwargs.setdefault('content_type', 'application/json')
+            super(JsonResponse, self).__init__(json.dumps(data), **kwargs)
 
 
 class UploadView(FormView):
@@ -70,11 +80,11 @@ class CropView(FormView):
         Default success crop handler
         """
         if request.is_ajax():
-            return HttpResponse(json.dumps({'image': {'url': cropped.image.url,
-                                                      'width': cropped.w,
-                                                      'height': cropped.h,
-                                                      }
-                                            }), mimetype='application/x-json')
+            return JsonResponse({
+                'image': {'url': cropped.image.url,
+                          'width': cropped.w,
+                          'height': cropped.h,
+                          }})
 
         return render(request, 'cropper/crop.html', {'form': form,
                                                      'cropped': cropped,
