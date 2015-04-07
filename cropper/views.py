@@ -8,18 +8,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import FormView
 from cropper.models import Original
 from cropper.forms import CroppedForm, OriginalForm
-
-
-try:
-    from django.http import JsonResponse
-except ImportError:
-    from django.http import HttpResponse
-    import json
-
-    class JsonResponse(HttpResponse):
-        def __init__(self, data, **kwargs):
-            kwargs.setdefault('content_type', 'application/json')
-            super(JsonResponse, self).__init__(json.dumps(data), **kwargs)
+from cropper.compat import JsonResponse
 
 
 class UploadView(FormView):
