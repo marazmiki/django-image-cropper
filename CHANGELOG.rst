@@ -2,6 +2,15 @@
 CHANGELOG
 =========
 
+Version 0.4 (~2015-04-09)
+========================
+
+* Improved pep8
+* Added support for Django 1.8
+* PEP-8 improvements
+* Travis CI integration
+* Can work with any kind of storage, not only with local one
+
 Version 0.3 (2013-06-28)
 ========================
 
@@ -23,4 +32,3 @@ Backward incompatibles
 ----------------------
 
 * Custom handlers now are created through class based views.
-

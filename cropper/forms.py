@@ -1,5 +1,9 @@
 # coding: utf-8
 
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from cropper.models import Cropped, Original
@@ -11,6 +15,7 @@ class OriginalForm(forms.ModelForm):
     """
     class Meta(object):
         model = Original
+        exclude = []
 
 
 class CroppedForm(forms.ModelForm):
@@ -61,6 +66,7 @@ class CroppedForm(forms.ModelForm):
 
     class Meta(object):
         model = Cropped
+        exclude = []
         widgets = {
             'original': forms.HiddenInput(),
         }

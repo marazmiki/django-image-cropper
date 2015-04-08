@@ -1,9 +1,14 @@
-from django.http import HttpResponse
+# coding: utf-8
+
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import FormView
 from cropper.models import Original
 from cropper.forms import CroppedForm, OriginalForm
-import json
+from cropper.compat import JsonResponse
 
 
 class UploadView(FormView):
@@ -54,23 +59,15 @@ class CropView(FormView):
         cropped = form.save(commit=False)
         cropped.save()
 
-        return self.success(request=self.request,
-                            form=form,
-                            original=self.get_object(),
-                            cropped=cropped)
-
-    def success(self, request, form, original, cropped):
-        """
-        Default success crop handler
-        """
-        if request.is_ajax():
-            return HttpResponse(json.dumps({'image': {'url': cropped.image.url,
-                                                      'width': cropped.w,
-                                                      'height': cropped.h,
-                                                      }
-                                            }), mimetype='application/x-json')
-
-        return render(request, 'cropper/crop.html', {'form': form,
-                                                     'cropped': cropped,
-                                                     'original': original
-                                                     })
+        if self.request.is_ajax():
+            return JsonResponse({
+                'image': {
+                    'url': cropped.image.url,
+                    'width': cropped.w,
+                    'height': cropped.h,
+                }})
+        return render(self.request, 'cropper/crop.html', {
+            'form': form,
+            'cropped': cropped,
+            'original': self.get_object()
+        })

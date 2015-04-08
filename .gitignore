@@ -1,4 +1,8 @@
+.coverage
 .hg
 .hgignore
 *.pyc
 *.swp
+*.egg-info
+*.egg
+htmlcov/

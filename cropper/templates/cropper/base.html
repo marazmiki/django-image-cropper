@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <meta  charset="UTF-8">
-    <link rel="stylesheet" href="{{STATIC_URL}}cropper/css/jquery.Jcrop.css" type="text/css" />
-    <script src="{{ STATIC_URL }}cropper/js/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}cropper/js/jquery.Jcrop.js"></script>
-</head>
-<body>
-{% block cropper_content %}
-{% endblock %}
-</body></html>
+<!DOCTYPE html>{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'cropper/css/jquery.Jcrop.css' %}">
+    <script src="{% static 'cropper/js/jquery.min.js' %}"></script>
+    <script src="{% static 'cropper/js/jquery.Jcrop.js' %}"></script>
+  </head>
+  <body>{% block cropper_content %}{% endblock %}
+  </body>
+</html>

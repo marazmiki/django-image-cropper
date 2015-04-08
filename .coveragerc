@@ -1,0 +1,15 @@
+[run]
+branch = True
+
+[report]
+omit = *migrations*
+show_missing = true
+
+
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    self.fail\(
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:

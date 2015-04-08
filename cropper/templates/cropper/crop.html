@@ -1,21 +1,31 @@
-{% extends "cropper/base.html" %}
+{% extends 'cropper/base.html' %}
 {% load i18n %}
-
+{% load staticfiles %}
 {% block cropper_content %}
-    <table>
+  <table class="table">
     <tbody>
-        <tr>
-            <td><img width="{{ original.image_width }}" height="{{ original.image_height }}" src="{{ original.image.url }}" id="cropbox" alt="" /></td>
-            <td><div style="width: 100px; height: 100px; overflow: hidden;"><img src="{{ original.image.url }}" id="preview" alt="" /></div></td>
-        </tr>
+      <tr>
+        <td>
+          <img width="{{ original.image_width }}"
+               height="{{ original.image_height }}" 
+               src="{{ original.image.url }}" id="cropbox" alt="">
+        </td>
+        <td>
+          <div style="width: 100px; height: 100px; overflow: hidden;">
+            <img src="{{ original.image.url }}" id="preview" alt="">
+          </div>
+        </td>
+      </tr>
     </tbody>
-    </table>
-    <div>
-        <form method="post" id="crop-form" action="{{ original.get_absolute_url }}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="{% trans "Crop" %}" /></p>
-        </form>
-    </div>
-    <script type="text/javascript" src="{{ STATIC_URL }}cropper/js/cropper.js">&nbsp;</script>
+  </table>
+  <div>
+    <form method="post" id="crop-form" action="{{ original.get_absolute_url }}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <p>
+        <input type="submit" value="{% trans 'Crop' %}">
+      </p>
+    </form>
+  </div>
+  <script src="{% static 'cropper/js/cropper.js' %}"></script>
 {% endblock %}
