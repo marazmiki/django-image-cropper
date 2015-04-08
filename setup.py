@@ -5,7 +5,7 @@ import setuptools
 import os
 
 
-version = '0.3.0'
+version = '0.4.0'
 package = 'cropper'
 
 path = os.path.join(os.path.dirname(__file__), 'cropper')
@@ -26,11 +26,14 @@ setuptools.setup(
     test_suite='tests.main',
     include_package_data=True,
     classifiers=[
-        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules'
+        'Environment :: Web Environment',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
     ],
 )

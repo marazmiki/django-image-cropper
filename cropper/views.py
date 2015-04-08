@@ -59,23 +59,15 @@ class CropView(FormView):
         cropped = form.save(commit=False)
         cropped.save()
 
-        return self.success(request=self.request,
-                            form=form,
-                            original=self.get_object(),
-                            cropped=cropped)
-
-    def success(self, request, form, original, cropped):
-        """
-        Default success crop handler
-        """
-        if request.is_ajax():
+        if self.request.is_ajax():
             return JsonResponse({
-                'image': {'url': cropped.image.url,
-                          'width': cropped.w,
-                          'height': cropped.h,
-                          }})
-
-        return render(request, 'cropper/crop.html', {'form': form,
-                                                     'cropped': cropped,
-                                                     'original': original
-                                                     })
+                'image': {
+                    'url': cropped.image.url,
+                    'width': cropped.w,
+                    'height': cropped.h,
+                }})
+        return render(self.request, 'cropper/crop.html', {
+            'form': form,
+            'cropped': cropped,
+            'original': self.get_object()
+        })
